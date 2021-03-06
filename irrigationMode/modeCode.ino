@@ -1,11 +1,15 @@
 #include "irrigationMode.h"
 
 extern byte outputByte;
+extern int pushButton_s2;
 
 int timings[]={7000,2000,5000,4000};
 
 void valveCycler(int startValve, int endValve)
 {
+    
+    outputByte=0;
+    updateShiftRegister();
     Serial.print(startValve);
     Serial.print(" start valve//");
     Serial.print("end valve ");
@@ -29,5 +33,6 @@ void valveCycler(int startValve, int endValve)
 
     outputByte=0;
     updateShiftRegister();
+
         
 }

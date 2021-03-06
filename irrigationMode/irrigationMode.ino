@@ -4,7 +4,7 @@
 const int latchPin =4;
 const int dataPin =2;
 const int clockPin =7;
-const int pushButton_s2=12;
+int pushButton_s2=12;
 
 byte outputByte = 0;
 int mode = 0;
@@ -112,25 +112,60 @@ void changeMode()
     {
     case 10:
         blinkAutoMode();
-        valveCycler(1,4);
+        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
+        {
+            valveCycler(1,4);
+        }     
         break;
 
     case 21:
-        valveCycler(1,1);
+        bitSet(outputByte,1);
+        updateShiftRegister();
+        delay(2000);
+        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
+        {
+            valveCycler(1,1);
+        }
+        outputByte=0;
+        updateShiftRegister();     
         break;
     case 22:
-        valveCycler(2,2);
+        bitSet(outputByte,2);
+        updateShiftRegister();
+        delay(2000);
+        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
+        {
+            valveCycler(2,2);
+        }
+        outputByte=0;
+        updateShiftRegister();     
         break;
     case 23:
-        valveCycler(3,3);
+       bitSet(outputByte,3);
+        updateShiftRegister();
+        delay(2000);
+        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
+        {
+            valveCycler(3,3);
+        }
+        outputByte=0;
+        updateShiftRegister();     
         break;
     case 24:
-        valveCycler(4,4);
+        bitSet(outputByte,4);
+        updateShiftRegister();
+        delay(2000);
+        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
+        {
+            valveCycler(4,4);
+        }
+        outputByte=0;
+        updateShiftRegister();     
         break;
-
-    
     
     }
+    
+    
 
 }
 
@@ -178,7 +213,7 @@ void blinkAutoMode()
             }
 
         counter ++;
-    } while (counter < 4);
+    } while (counter < 5);
     
           
     
