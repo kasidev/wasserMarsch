@@ -119,48 +119,16 @@ void changeMode()
         break;
 
     case 21:
-        bitSet(outputByte,1);
-        updateShiftRegister();
-        delay(2000);
-        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
-        {
-            valveCycler(1,1);
-        }
-        outputByte=0;
-        updateShiftRegister();     
+        valveCycler(1,1);
         break;
     case 22:
-        bitSet(outputByte,2);
-        updateShiftRegister();
-        delay(2000);
-        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
-        {
-            valveCycler(2,2);
-        }
-        outputByte=0;
-        updateShiftRegister();     
+        valveCycler(2,2);     
         break;
     case 23:
-       bitSet(outputByte,3);
-        updateShiftRegister();
-        delay(2000);
-        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
-        {
-            valveCycler(3,3);
-        }
-        outputByte=0;
-        updateShiftRegister();     
+        valveCycler(3,3);     
         break;
     case 24:
-        bitSet(outputByte,4);
-        updateShiftRegister();
-        delay(2000);
-        if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
-        {
-            valveCycler(4,4);
-        }
-        outputByte=0;
-        updateShiftRegister();     
+        valveCycler(4,4);
         break;
     
     }
