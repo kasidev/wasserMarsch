@@ -20,6 +20,7 @@ void valveCycler(int startValve, int endValve)
     if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
     {
         outputByte=0;
+        bitSet(outputByte,6);
         updateShiftRegister();
         Serial.print(startValve);
         Serial.print(" start valve//");
@@ -29,7 +30,7 @@ void valveCycler(int startValve, int endValve)
 
         delay(5000);
         
-        bitSet(outputByte,5);
+        bitClear(outputByte,6);
         updateShiftRegister();
         delay(1000);
 
@@ -46,6 +47,7 @@ void valveCycler(int startValve, int endValve)
 
     }
     outputByte=0;
+    bitSet(outputByte,6);
     updateShiftRegister();
 
     
