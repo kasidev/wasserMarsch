@@ -8,14 +8,7 @@ const int pump =6;
 int pushButton_s2=12;
 
 int mode = 0;
-/*
-0 = standby
-10 = auto
-21 = manual valv1
-22 = manual valve2
-23 = manual valve3
-24 = manual valve4
-*/
+
 bool buttonLock = 0;
 
 void setup()

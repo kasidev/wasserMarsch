@@ -10,10 +10,15 @@ const int pump =6;
 int pushButton_s2=12;
 
 int mode = 0;
-
+/*
+0 = standby
+10 = auto
+21 = manual valv1
+22 = manual valve2
+23 = manual valve3
+24 = manual valve4
+*/
 bool buttonLock = 0;
-bool irrigationStart = 0;
-unsigned long shift = 0;
 
 void setup()
 {
@@ -32,78 +37,41 @@ void setup()
 
 void loop()
 {
-    
-    irrigationStart=checkTime(millis()-shift);
+    delay(10000);
+    digitalWrite(v1,HIGH);
+    delay(10000);
+    digitalWrite(v2,HIGH);
 
-    if(irrigationStart == 1)
+    if(digitalRead(pushButton_s2) == LOW && buttonLock == 0)
      {
-        off();
-        blinkAll(1);        
         digitalWrite(pump,HIGH);
         delay(500);
         digitalWrite(v3,HIGH);
-        delay(120000);
+        delay(10000);
         digitalWrite(v3,LOW);
         digitalWrite(pump,LOW);
         delay(500);
         digitalWrite(pump,HIGH);
         delay(500);
         digitalWrite(v1,HIGH);
-        delay(120000);
+        delay(10000);
         digitalWrite(pump,LOW);
         digitalWrite(v1,LOW);
-        shift = millis();
+        
+       Serial.println("button pressed");
+        buttonLock=1;
     } 
 
-    if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
+    if(digitalRead(pushButton_s2)== HIGH)
     {
-         shift = millis();
-         off();
-         blinkAll(1);
-         Serial.println("button pressed");
-         buttonLock = 1;
-         
-    }
-    if (digitalRead(pushButton_s2) == HIGH && buttonLock == 1)
-    {
-        buttonLock = 0;
+        buttonLock =0;
     }
 
-}
-
-bool checkTime(unsigned long time)
-{
-    bool result = 0;
-    unsigned long interval = ((36 * 60 * 60) * 1000) / 4;
-    if (time>interval*1)
-    {
-        digitalWrite(v1,HIGH);
-    }
-
-    if (time>interval*2)
-    {
-        digitalWrite(v2,HIGH);
-    }
-    if (time>interval*3)
-    {
-        digitalWrite(v3,HIGH);
-    }
-    if (time>interval*4)
-    {
-        digitalWrite(v4,HIGH);
-        result = 1;
-    }
-    return result;
     
-}
 
-void off()
-{
-    digitalWrite(v1,LOW);
-    digitalWrite(v2,LOW);
-    digitalWrite(v3,LOW);
-    digitalWrite(v4,LOW);
-    digitalWrite(pump,LOW);
+
+
+
 }
 
 void blinkAll(int blinkies)
