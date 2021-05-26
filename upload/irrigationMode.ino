@@ -1,5 +1,3 @@
-#include <EEPROM.h>
-
 const int v1 =2;
 //v1 - potatoes
 const int v2 =3;
@@ -41,6 +39,7 @@ void loop()
     
     //delay(5*24*60*60*1000);
     //EEPROM.write(0, 1);
+    Serial.write("test");
     if(digitalRead(pushButton_s2) == LOW && buttonLock == 0)
      {
         digitalWrite(pump,HIGH);

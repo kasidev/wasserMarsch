@@ -1,7 +1,7 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "irrigationMode\\irrigationMode.ino",
-    "port": "COM3",
+    "sketch": "upload\\irrigationMode.ino",
+    "port": "COM6",
     "output": "../ArduinoOutput",
     "programmer": "AVR ISP"
 }
