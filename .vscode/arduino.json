@@ -1,5 +1,5 @@
 {
-    "sketch": "Projekt Sarah\\WiFiWebClientRepeating.ino",
+    "sketch": "Projekt Sarah\\sketch.ino",
     "board": "arduino:megaavr:uno2018",
     "port": "COM4",
     "programmer": "arduino:medbg"
