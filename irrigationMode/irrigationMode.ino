@@ -42,14 +42,14 @@ void loop()
         digitalWrite(pump,HIGH);
         delay(500);
         digitalWrite(v3,HIGH);
-        delay(120000);
+        delay(600000);
         digitalWrite(v3,LOW);
         digitalWrite(pump,LOW);
         delay(500);
         digitalWrite(pump,HIGH);
         delay(500);
         digitalWrite(v1,HIGH);
-        delay(120000);
+        delay(600000);
         digitalWrite(pump,LOW);
         digitalWrite(v1,LOW);
         shift = millis();
@@ -57,9 +57,7 @@ void loop()
 
     if (digitalRead(pushButton_s2) == LOW && buttonLock == 0)
     {
-         shift = millis();
-         off();
-         blinkAll(1);
+         //shift = millis();
          Serial.println("button pressed");
          buttonLock = 1;
          
@@ -67,6 +65,7 @@ void loop()
     if (digitalRead(pushButton_s2) == HIGH && buttonLock == 1)
     {
         buttonLock = 0;
+        off();
     }
 
 }
@@ -74,27 +73,77 @@ void loop()
 bool checkTime(unsigned long time)
 {
     bool result = 0;
-    unsigned long interval = ((36 * 60 * 60) * 1000) / 4;
+    unsigned long interval = ((56.0 * 60 * 60) * 1000) / 4.0;
+    //unsigned long interval = ((20) * 1000) / 4.0;
+    //Serial.println(interval);
+    if (time<interval*1)
+    {
+        showStatus(0);
+    }
     if (time>interval*1)
     {
-        digitalWrite(v1,HIGH);
+        showStatus(1);
     }
 
     if (time>interval*2)
     {
-        digitalWrite(v2,HIGH);
+        showStatus(2);
+        //digitalWrite(v2,HIGH);
     }
     if (time>interval*3)
     {
-        digitalWrite(v3,HIGH);
+        showStatus(3);
+        //digitalWrite(v3,HIGH);
     }
     if (time>interval*4)
     {
-        digitalWrite(v4,HIGH);
+        showStatus(4);
+        //digitalWrite(v4,HIGH);
         result = 1;
     }
     return result;
     
+}
+
+void showStatus(int status)
+{
+    switch (status)
+    {
+    case 1:
+        if (buttonLock == 1)
+        {
+            digitalWrite(v1,HIGH);
+        }
+        break;
+    case 2:
+        if (buttonLock == 1)
+        {
+            digitalWrite(v1,HIGH);
+            digitalWrite(v2,HIGH);
+        }
+        break;
+    case 3:
+        if (buttonLock == 1)
+        {
+            digitalWrite(v1,HIGH);
+            digitalWrite(v2,HIGH);
+            digitalWrite(v3,HIGH);
+        }
+        break;
+    case 0:
+        if (buttonLock == 1)
+        {
+            digitalWrite(v1,HIGH);
+            digitalWrite(v2,HIGH);
+            digitalWrite(v3,HIGH);
+            digitalWrite(v4,HIGH);
+        }
+        break;
+ 
+    
+    default:
+        break;
+    }
 }
 
 void off()

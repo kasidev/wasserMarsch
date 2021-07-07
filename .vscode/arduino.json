@@ -1,6 +1,7 @@
 {
-    "sketch": "irrigationMode\\irrigationMode.ino",
-    "board": "arduino:avr:uno",
-    "port": "COM6",
-    "programmer": "arduino:avrisp"
+    "sketch": "Projekt Sarah\\beta.ino",
+    "board": "arduino:megaavr:uno2018",
+    "port": "COM9",
+    "programmer": "arduino:avrisp",
+    "configuration": "mode=on"
 }
