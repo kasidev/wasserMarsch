@@ -1,7 +1,6 @@
 {
-    "sketch": "Projekt Sarah\\beta.ino",
+    "sketch": "Projekt Sarah\\WiFiWebClientRepeating.ino",
     "board": "arduino:megaavr:uno2018",
-    "port": "COM9",
-    "programmer": "arduino:avrisp",
-    "configuration": "mode=on"
+    "port": "COM4",
+    "programmer": "arduino:medbg"
 }
