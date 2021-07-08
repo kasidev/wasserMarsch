@@ -16,7 +16,6 @@
  This code is in the public domain.
  */
 
-int D2 = 2;
 
 #include <SPI.h>
 #include <WiFiNINA.h>
@@ -24,18 +23,17 @@ int D2 = 2;
 #include <WiFiUdp.h>
 #include <TimeLib.h>
 #include <NTPClient.h>
-
 #include "arduino_secrets.h" 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;            // your network key index number (needed only for WEP)
-
 int status = WL_IDLE_STATUS;
 
 // Initialize the WiFi client library
 WiFiClient client;
 
+// 
 WiFiUDP ntpUDP;
 
 // By default 'pool.ntp.org' is used with 60 seconds update interval and
@@ -49,25 +47,26 @@ char server[] = "echo.jsontest.com";
 unsigned long lastConnectionTime = 0;            // last time you connected to the server, in milliseconds
 const unsigned long postingInterval = 20L * 1000L; // delay between updates, in milliseconds
 
-void setup() {
   //Initialize serial and wait for port to open:
-  pinMode(D2, OUTPUT);
-  Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
 
+  /*while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }*/
+//connect to the registed WiFi Network
+void connect2Network(){
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
     Serial.println("Communication with WiFi module failed!");
     // don't continue
     while (true);
   }
-
+  
+  
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
+  
 
   // attempt to connect to WiFi network:
   while (status != WL_CONNECTED) {
@@ -79,12 +78,14 @@ void setup() {
 
     // wait 10 seconds for connection:
     delay(10000);
+    printWifiStatus();
   }
   // you're connected now, so print out the status:
   printWifiStatus();
+  
 }
 
-void loop() {
+void httpGetJSON(unsigned long lastRequest, char server, char url) {
   // if there's incoming data from the net connection.
   // send it out the serial port.  This is for debugging
   // purposes only:
@@ -141,6 +142,7 @@ void loop() {
   }
 
 }
+
 
 // this method makes a HTTP connection to the server:
 void httpRequest() {
