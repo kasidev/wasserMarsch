@@ -91,9 +91,9 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
   // if there's incoming data from the net connection.
   // send it out the serial port.  This is for debugging
   // purposes only:
-
+  
   while (client.available()) {
-
+    Serial.println("try to get data");
     //skip response header 
 
     char endOfHeaders[] = "\r\n\r\n";
@@ -117,9 +117,9 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
         
       }
       //const char* test = doc["nextIrrigation"];
-      nextIrrigation={doc["autoIntervall"]doc["nextIrrigation"]};
-      Serial.println(nextIrrigation);
-      Serial.println("test")
+      long test[3]={doc["autoIntervall"],doc["nextIrrigation"]};
+      Serial.println(test[1]);
+      Serial.println("test");
       return;
 
       
@@ -139,6 +139,18 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
     }
     
   }
+  // if ten seconds have passed since your last connection,
+  // then connect again and send data:
+  timeClient.update();
+  unsigned long currentTime = timeClient.getEpochTime();
+  Serial.println(currentTime - 0 > postingInterval);
+  if (currentTime - 0 > postingInterval) {
+    httpRequest(host,url);
+  }
+  //return responseArray; 
+
+  Serial.println("end of function");
+  return;
 
 }
 
