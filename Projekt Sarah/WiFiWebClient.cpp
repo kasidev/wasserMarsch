@@ -117,9 +117,7 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
         
       }
       //const char* test = doc["nextIrrigation"];
-      long test[3]={doc["autoIntervall"],doc["nextIrrigation"]};
-      Serial.println(test[1]);
-      Serial.println("test");
+      nextIrrigation=doc["nextIrrigation"];
       return;
 
       
