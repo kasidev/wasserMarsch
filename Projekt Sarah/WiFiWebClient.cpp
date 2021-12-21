@@ -24,11 +24,13 @@
 #include <TimeLib.h>
 #include <NTPClient.h>
 #include "arduino_secrets.h" 
+#include <StreamUtils.h>
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;            // your network key index number (needed only for WEP)
 int status = WL_IDLE_STATUS;
+
 
 // Initialize the WiFi client library
 WiFiClient client;
@@ -41,11 +43,11 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
 
 // server address:
-char server[] = "echo.jsontest.com";
+//char server[] = "echo.jsontest.com";
 //IPAddress server(64,131,82,241);
 
 unsigned long lastConnectionTime = 0;            // last time you connected to the server, in milliseconds
-const unsigned long postingInterval = 20L * 1000L; // delay between updates, in milliseconds
+const unsigned long postingInterval = 20; // delay between updates, in milliseconds
 
   //Initialize serial and wait for port to open:
 
@@ -85,27 +87,25 @@ void connect2Network(){
   
 }
 
-void httpGetJSON(unsigned long lastRequest, char server, char url) {
+void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String host, String url) {
   // if there's incoming data from the net connection.
   // send it out the serial port.  This is for debugging
   // purposes only:
 
-  
-
   while (client.available()) {
-    Serial.print("Response // ");
-    Serial.print(client.available());
-    Serial.println("/");
-    //char response123[]=client.readString();
-   
+
+    //skip response header 
+
     char endOfHeaders[] = "\r\n\r\n";
     if (!client.find(endOfHeaders)) {
       Serial.println(F("Invalid response"));
       return;
+      
     }else
     {
       Serial.println(F("Valid response"));
       //Serial.print(client.readString());
+      
       const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
       DynamicJsonDocument doc(capacity);
       DeserializationError error = deserializeJson(doc, client);
@@ -114,49 +114,52 @@ void httpGetJSON(unsigned long lastRequest, char server, char url) {
         Serial.println(error.f_str());
         client.stop();
         return;
+        
       }
-      Serial.println(doc["key"].as<char*>());
+      //const char* test = doc["nextIrrigation"];
+      nextIrrigation={doc["autoIntervall"]doc["nextIrrigation"]};
+      Serial.println(nextIrrigation);
+      Serial.println("test")
+      return;
 
+      
+      /*
+      // if ten seconds have passed since your last connection,
+      // then connect again and send data:
       timeClient.update();
+      unsigned long currentTime = timeClient.getEpochTime();
+      Serial.println(currentTime - lastRequest > postingInterval);
+      if (currentTime - lastRequest > postingInterval) {
+        httpRequest(host,url);
+      }
+      */
 
-      Serial.println(timeClient.getFormattedTime());
 
-      delay(1000);
-
+      
     }
     
-    
-
-
-    //char c = client.read();
-    //Serial.write(c);
-    //digitalWrite(D2, 1);
-    //delay(5000);
-    //digitalWrite(D2,0);
-  }
-
-  // if ten seconds have passed since your last connection,
-  // then connect again and send data:
-  if (millis() - lastConnectionTime > postingInterval) {
-    httpRequest();
   }
 
 }
 
 
 // this method makes a HTTP connection to the server:
-void httpRequest() {
+void httpRequest(String host, String url) {
   // close any connection before send a new request.
   // This will free the socket on the NINA module
   client.stop();
+  
+  char serverAdress[host.length()+1];
+  host.toCharArray(serverAdress,host.length()+1);
+
 
   // if there's a successful connection:
-  if (client.connect(server, 80)) {
+  if (client.connect(serverAdress, 80)) {
     Serial.println("connecting....");
     // send the HTTP GET request:
-    client.println("GET /key/value/one/two HTTP/1.1");
-    client.println("Host: echo.jsontest.com");
-    client.println("User-Agent: ArduinoWiFi/1.1");
+    client.println(url);
+    client.println("Host: "+host);
+    client.println("User-Agent: ArduinoWiFi/1.1 Sarah");
     client.println("Connection: close");
     client.println();
 
