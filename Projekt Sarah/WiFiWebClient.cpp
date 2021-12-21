@@ -47,7 +47,7 @@ NTPClient timeClient(ntpUDP);
 //IPAddress server(64,131,82,241);
 
 unsigned long lastConnectionTime = 0;            // last time you connected to the server, in milliseconds
-const unsigned long postingInterval = 20; // delay between updates, in milliseconds
+const unsigned long postingInterval = 100; // delay between updates, in milliseconds
 
   //Initialize serial and wait for port to open:
 
@@ -93,7 +93,6 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
   // purposes only:
   
   while (client.available()) {
-    Serial.println("try to get data");
     //skip response header 
 
     char endOfHeaders[] = "\r\n\r\n";
@@ -116,24 +115,15 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
         return;
         
       }
-      //const char* test = doc["nextIrrigation"];
       nextIrrigation=doc["nextIrrigation"];
+      timeClient.update();
+      lastRequest = timeClient.getEpochTime();
+      Serial.print("time of request: ");
+      Serial.println(lastRequest);
       return;
 
       
-      /*
-      // if ten seconds have passed since your last connection,
-      // then connect again and send data:
-      timeClient.update();
-      unsigned long currentTime = timeClient.getEpochTime();
-      Serial.println(currentTime - lastRequest > postingInterval);
-      if (currentTime - lastRequest > postingInterval) {
-        httpRequest(host,url);
-      }
-      */
-
-
-      
+          
     }
     
   }
@@ -141,14 +131,16 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
   // then connect again and send data:
   timeClient.update();
   unsigned long currentTime = timeClient.getEpochTime();
-  Serial.println(currentTime - 0 > postingInterval);
-  if (currentTime - 0 > postingInterval) {
+  Serial.print("current time: ");
+  Serial.println(currentTime);
+  Serial.print("time since last request: ");
+  Serial.println(currentTime - lastRequest);
+  if (currentTime - lastRequest > 1000) {
     httpRequest(host,url);
   }
-  //return responseArray; 
-
-  Serial.println("end of function");
-  return;
+  else{
+    return;
+  }
 
 }
 
