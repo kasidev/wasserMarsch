@@ -87,7 +87,7 @@ void connect2Network(){
   
 }
 
-void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String host, String url) {
+void httpGetJSON(unsigned long &currentTime,unsigned long &updateIntervall,unsigned long &nextIrrigation,unsigned long &lastRequest,String host, String url) {
   // if there's incoming data from the net connection.
   // send it out the serial port.  This is for debugging
   // purposes only:
@@ -105,8 +105,9 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
       Serial.println(F("Valid response"));
       //Serial.print(client.readString());
       
-      const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
-      DynamicJsonDocument doc(capacity);
+      //const size_t capacity = JSON_OBJECT_SIZE(4) + JSON_ARRAY_SIZE(4) + 60;
+      //DynamicJsonDocument doc(capacity);
+      StaticJsonDocument<128> doc;
       DeserializationError error = deserializeJson(doc, client);
       if (error) {
         Serial.print(F("deserializeJson() failed: "));
@@ -116,6 +117,7 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
         
       }
       nextIrrigation=doc["nextIrrigation"];
+      updateIntervall=doc["updateIntervall"];
       timeClient.update();
       lastRequest = timeClient.getEpochTime();
       Serial.print("time of request: ");
@@ -130,12 +132,12 @@ void httpGetJSON(unsigned long &nextIrrigation,unsigned long &lastRequest,String
   // if ten seconds have passed since your last connection,
   // then connect again and send data:
   timeClient.update();
-  unsigned long currentTime = timeClient.getEpochTime();
+  currentTime = timeClient.getEpochTime();
   Serial.print("current time: ");
   Serial.println(currentTime);
   Serial.print("time since last request: ");
   Serial.println(currentTime - lastRequest);
-  if (currentTime - lastRequest > 1000) {
+  if (currentTime - lastRequest > (updateIntervall/1000)) {
     httpRequest(host,url);
   }
   else{
