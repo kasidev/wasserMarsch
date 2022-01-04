@@ -54,7 +54,6 @@ taskDao
 
   
 
-app.get
 app.post('/addNew',(req, res, next) =>taskList.addNew(req, res).catch(next))
 app.get('/findItem', (req, res, next) =>taskList.findItem(req, res).catch(next))
 app.get('/getParams', (req, res, next) =>taskList.getParams(req, res).catch(next))
