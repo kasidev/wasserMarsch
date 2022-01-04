@@ -54,9 +54,10 @@ taskDao
 
   
 
-
+app.get
 app.post('/addNew',(req, res, next) =>taskList.addNew(req, res).catch(next))
 app.get('/findItem', (req, res, next) =>taskList.findItem(req, res).catch(next))
+app.get('/getParams', (req, res, next) =>taskList.getParams(req, res).catch(next))
 app.get('/findItemsOfType', (req, res, next) =>taskList.findItemsOfType(req, res).catch(next))
 app.post('/findWithProp', (req, res, next) =>taskList.findWithProp(req, res).catch(next))
 app.post('/updateItem',(req, res, next) =>taskList.itemUpdate(req, res).catch(next))

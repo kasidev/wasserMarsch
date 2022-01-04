@@ -37,15 +37,16 @@ class pumpenMenu extends React.Component{
     }
 
     updateData(){
+        const updateData = this.state
         updateItem({
             itemId :"fb8ecb99-bd48-4a4d-a152-7a93b99b102b",
             key : "nextIrrigation",
-            value : this.state.nextIrrigation
+            value : updateData.nextIrrigation
         })
         updateItem({
             itemId :"fb8ecb99-bd48-4a4d-a152-7a93b99b102b",
             key : "updateIntervall",
-            value : this.state.updateIntervall
+            value : updateData.updateIntervall
         })
     
 
@@ -65,7 +66,7 @@ class pumpenMenu extends React.Component{
                     e("input",
                         {className:"form-control",
                         type: "datetime-local",
-                        value: moment.unix(this.state.nextIrrigation).format("YYYY-MM-DDTHH:mm"),
+                        defaultValue: moment.unix(this.state.nextIrrigation).format("YYYY-MM-DDTHH:mm"),
                         onBlur: this.newDate})
                 ),
           
@@ -77,7 +78,7 @@ class pumpenMenu extends React.Component{
                         type: "range", id:"refreshRange",
                         min:"300",
                         max:"86400",
-                        value: this.state.updateIntervall,
+                        //value: this.state.updateIntervall,
                         onMouseUp: this.newRefresh}),
                     e("span",{},`${Math.round(this.state.updateIntervall / 3600)} Stunden : \u00A0 `),
                     e("span",{},`${Math.round((this.state.updateIntervall % 3600)/60)} minuten`),  

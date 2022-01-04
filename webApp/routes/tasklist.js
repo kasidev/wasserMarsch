@@ -102,6 +102,21 @@ const { isEmpty, max, indexOf } = require("lodash");
     res.status(200).send(response)
   }
 
+  //send params to arduino
+  async getParams(req, res){
+
+    const data = await this.taskDao.getItem("fb8ecb99-bd48-4a4d-a152-7a93b99b102b")
+
+    const params = {
+      autoInterval : data.autoInterval,
+      nextIrrigation : data.nextIrrigation,
+      updateIntervall : data.updateIntervall
+    }
+
+    res.status(200).send(params)
+
+  }
+
   
  
 
