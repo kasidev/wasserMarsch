@@ -118,6 +118,7 @@ void httpGetJSON(unsigned long &currentTime,unsigned long &updateIntervall,unsig
       }
       nextIrrigation=doc["nextIrrigation"];
       updateIntervall=doc["updateIntervall"];
+      updateIntervall = updateIntervall*1000;
       timeClient.update();
       lastRequest = timeClient.getEpochTime();
       Serial.print("time of request: ");

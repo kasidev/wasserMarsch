@@ -59,7 +59,7 @@ class pumpenMenu extends React.Component{
         e("div",{className : "row justify-content-center"},
 
 
-            e("div",{className : "col-4 align-items-center"},
+            e("div",{className : "col-12 align-items-center"},
                 e("h2",{className: ""},"Sarah's Pumpensteuerung"),
                 e("div",{className: "input-group mb-3"},
                     e("span",{className: "input-group-text"},"Nächste Bewässerung"),
