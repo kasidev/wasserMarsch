@@ -25,7 +25,7 @@ connect2Network();
 void loop(){
 
 
-httpGetJSON(currentTime,updateIntervall,nextIrrigation,lastRequest,"wassermarsch.azurewebsites.net","GET /getparams HTTP/1.1");
+httpGetJSON(currentTime,updateIntervall,nextIrrigation,lastRequest,"wassermarsch.azurewebsites.net","GET / HTTP/1.1");
 //Serial.println("this is new code");
 Serial.println("---------New Loop--------");
 if (currentTime<nextIrrigation)
@@ -48,12 +48,13 @@ if (currentTime>nextIrrigation && nextIrrigation > lastIrrigation)
     irrigation();
     lastIrrigation = nextIrrigation;
 }
-delay(10000);
+delay(3600000);
 
 
 
 /*
 Next step:
+-go back to /getparams for parameters
 -add an off switch in the webapp
 -add a stop/start switch in the webapp
 -report last irrigation to the webapp via post
@@ -69,7 +70,7 @@ Serial.print("------");
 Serial.println("Start the pump ");
 digitalWrite(LED_BUILTIN, HIGH);
 digitalWrite(pump,HIGH);
-delay(40000);
+delay(50000);
 digitalWrite(LED_BUILTIN, LOW);
 digitalWrite(pump,LOW);
 Serial.println("stop the pump ");
